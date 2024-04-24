@@ -1,11 +1,29 @@
 USE BDHIS_MINSA
-SELECT
-MAESTRO_HIS_ESTABLECIMIENTO.Codigo_Unico,
-MAESTRO_HIS_ESTABLECIMIENTO.MicroRed,
-MAESTRO_HIS_ESTABLECIMIENTO.Nombre_Establecimiento,
-MAESTRO_PACIENTE.Numero_Documento_PACIENTE,
-MAESTRO_HIS_COLEGIO.Descripcion_Colegio,
-TN.Id_Cita,TN.Anio,TN.Mes,TN.Dia,TN.Lote,TN.Num_Pag,TN.Num_Reg,TN.Id_Ups,
-TN.Id_Condicion_Establecimiento,TN.Id_Condicion_Servicio,Id_Genero,
-TN.Edad_Reg,TN.Tipo_Edad,
-TN.Codigo_Item,TN.Tipo_Diagnostico,TN.Valor_Lab
+DROP TABLE SQL1
+SELECT DISTINCT
+TN.Edad_Reg,TN.Tipo_Edad,tn.anio,TN.MES,ES.Nombre_Establecimiento,TN.Id_Condicion_Establecimiento, COUNT (*)AS registros
+INTO SQL1
+FROM NOMINAL_TRAMA_NUEVO TN
+INNER JOIN MAESTRO_HIS_ESTABLECIMIENTO ES ON ES.ID_ESTABLECIMIENTO = TN.ID_ESTABLECIMIENTO
+--ATC  N R C
+where tn.ID_CONDICION_ESTABLECIMIENTO IN ('N','R','C') AND TN.Id_Correlativo_Lab = '1' AND TN.Id_Correlativo_Item = '1'--AND TN.ANIO ='2020'
+--ATD  N R
+--where tn.ID_CONDICION_ESTABLECIMIENTO IN ('N','R') AND TN.Id_Correlativo_Lab ='1' AND TN.Id_Correlativo_Item = '1'--AND TN.ANIO ='2020'
+AND TN.MES IN ('1','2','3','4','5','6','7','8','9','10','11','12')
+AND TN.ANIO IN ('2024')
+GROUP BY
+TN.Edad_Reg,TN.Tipo_Edad,tn.anio,TN.MES,ES.Nombre_Establecimiento,TN.Id_Condicion_Establecimiento
+ALTER TABLE SQL1
+ADD GRUPO_ETAREO AS
+CASE
+WHEN SQL1.TIPO_EDAD ='D' THEN '< 1 MES'
+WHEN SQL1.TIPO_EDAD ='M' THEN '1 - 11 MESES'
+WHEN SQL1.TIPO_EDAD ='A' AND SQL1.EDAD_REG between 1 AND  12 THEN '1 - 11 AÑOS'
+WHEN SQL1.TIPO_EDAD ='A' AND SQL1.EDAD_REG between 12 and 14 THEN '12 - 14 AÑOS'
+WHEN SQL1.TIPO_EDAD ='A' AND SQL1.EDAD_REG between 15 and 17 THEN '15 - 17 AÑOS'
+WHEN SQL1.TIPO_EDAD ='A' AND SQL1.EDAD_REG between 18 and 29 THEN '18 - 29 AÑOS'
+WHEN SQL1.TIPO_EDAD ='A' AND SQL1.EDAD_REG between 30 and 59 THEN '30 - 59 AÑOS'
+WHEN SQL1.TIPO_EDAD ='A' AND SQL1.EDAD_REG > 59 THEN '60 A + AÑOS'
+ELSE ''
+END
+SELECT * FROM SQL1

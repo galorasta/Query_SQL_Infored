@@ -6,8 +6,8 @@ MAESTRO_HIS_ESTABLECIMIENTO.Codigo_Unico,
 MAESTRO_HIS_ESTABLECIMIENTO.MicroRed,
 MAESTRO_HIS_ESTABLECIMIENTO.Nombre_Establecimiento,
 MAESTRO_PACIENTE.Numero_Documento_PACIENTE,
-
-TN.Id_Cita,TN.Anio,TN.Mes,TN.Dia,TN.Lote,TN.Num_Pag,TN.Num_Reg,TN.Id_Ups,MAESTRO_HIS_COLEGIO.Descripcion_Colegio,
+MAESTRO_HIS_COLEGIO.Descripcion_Colegio,
+TN.Id_Cita,TN.Anio,TN.Mes,TN.Dia,TN.Lote,TN.Num_Pag,TN.Num_Reg,TN.Id_Ups,
 TN.Id_Condicion_Establecimiento,TN.Id_Condicion_Servicio,Id_Genero,
 TN.Edad_Reg,TN.Tipo_Edad,
 TN.Codigo_Item,TN.Tipo_Diagnostico,TN.Valor_Lab
